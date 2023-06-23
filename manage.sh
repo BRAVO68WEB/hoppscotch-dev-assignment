@@ -7,15 +7,22 @@
 
 # Example:
 # ./manage.sh start all
+# ./manage.sh stop nginx
 
 # Commands:
 # start: start the service
 # stop: stop the service
 # restart: restart the service
 # status: check the status of the service
+# logs: check the logs of the service
 
 # Services:
 # all: apply the command to all services
+# orders: apply the command to the orders service
+# user: apply the command to the user service
+# products: apply the command to the products 
+# nginx: apply the command to the nginx service
+# db: apply the command to the db service
 
 # Check if the command is valid
 if [ "$1" != "start" ] && [ "$1" != "stop" ] && [ "$1" != "restart" ] && [ "$1" != "status" ]; then
@@ -24,7 +31,7 @@ if [ "$1" != "start" ] && [ "$1" != "stop" ] && [ "$1" != "restart" ] && [ "$1" 
 fi
 
 # Check if the service is valid
-if [ "$2" != "all" ] && [ "$2" != "orders" ] && [ "$2" != "user" ] && [ "$2" != "products" ]; then
+if [ "$2" != "all" ] && [ "$2" != "orders" ] && [ "$2" != "user" ] && [ "$2" != "products" ] && [ "$2" != "nginx" ] && [ "$2" != "db" ]; then
     echo "Invalid service"
     exit 1
 fi
@@ -70,5 +77,16 @@ if [ "$1" == "status" ]; then
     else
         echo "Checking status of $2 service..."
         docker-compose ps $2
+    fi
+fi
+
+# Check the logs of the service
+if [ "$1" == "logs" ]; then
+    if [ "$2" == "all" ]; then
+        echo "Checking logs of all services..."
+        docker-compose logs -f
+    else
+        echo "Checking logs of $2 service..."
+        docker-compose logs -f $2
     fi
 fi
